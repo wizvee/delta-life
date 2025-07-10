@@ -1,5 +1,11 @@
+import { Route, Routes } from "react-router-dom";
+
 function App() {
-  return <div>APP</div>;
+  return (
+    <Routes>
+      <Route path="/login" />
+    </Routes>
+  );
 }
 
 export default App;
