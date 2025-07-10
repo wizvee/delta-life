@@ -1,7 +1,8 @@
 import { Route, Routes } from "react-router-dom";
+import { ProtectedLayout } from "./routes/ProtectedLayout";
 
 import LoginPage from "./pages/LoginPage";
-import { ProtectedLayout } from "./routes/ProtectedLayout";
+import ProjectPage from "./pages/ProjectPage";
 
 function App() {
   return (
@@ -9,6 +10,7 @@ function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route element={<ProtectedLayout />}>
         <Route path="/" />
+        <Route path="/project" element={<ProjectPage />} />
       </Route>
     </Routes>
   );
