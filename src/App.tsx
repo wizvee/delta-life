@@ -2,8 +2,8 @@ import { Route, Routes } from "react-router-dom";
 import { ProtectedLayout } from "./routes/ProtectedLayout";
 
 import Home from "./pages/Home";
+import StatPage from "./pages/StatPage";
 import LoginPage from "./pages/LoginPage";
-import ProjectPage from "./pages/ProjectPage";
 
 function App() {
   return (
@@ -11,7 +11,7 @@ function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route element={<ProtectedLayout />}>
         <Route path="/" element={<Home />} />
-        <Route path="/project" element={<ProjectPage />} />
+        <Route path="/stat/:id" element={<StatPage />} />
       </Route>
     </Routes>
   );

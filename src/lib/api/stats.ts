@@ -9,3 +9,13 @@ export async function getStats(userId: string) {
   if (error) throw error;
   return data;
 }
+
+export async function getStat(statId: string) {
+  const { data, error } = await supabase
+    .from("stats")
+    .select("id, name")
+    .eq("statId", statId);
+
+  if (error) throw error;
+  return data;
+}
