@@ -1,17 +1,8 @@
-// src/context/SupabaseContext.tsx
-import { createContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { supabase } from "@/lib/supabase";
-import type { Session, SupabaseClient } from "@supabase/supabase-js";
-
-interface SupabaseContextType {
-  supabase: SupabaseClient;
-  session: Session | null;
-}
-
-const SupabaseContext = createContext<SupabaseContextType | undefined>(
-  undefined,
-);
+import type { Session } from "@supabase/supabase-js";
+import { SupabaseContext } from "./SupabaseContext";
 
 export const SupabaseProvider = ({
   children,
@@ -21,9 +12,7 @@ export const SupabaseProvider = ({
   const [session, setSession] = useState<Session | null>(null);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session);
-    });
+    supabase.auth.getSession().then(({ data }) => setSession(data.session));
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {

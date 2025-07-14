@@ -31,7 +31,7 @@ export function ProtectedLayout() {
   if (loading || !session) return null;
 
   return (
-    <div>
+    <div className="px-4 py-2">
       <Outlet />
     </div>
   );
