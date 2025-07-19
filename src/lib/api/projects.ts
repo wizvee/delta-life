@@ -10,10 +10,10 @@ export type Project = {
   due_date?: string;
 };
 
-export async function createProject(project: Project) {
+export async function createProject(userId: string, statId: string) {
   const { data, error } = await supabase
     .from("projects")
-    .insert(project)
+    .insert({ user_id: userId, stat_id: statId, title: "New Project" })
     .select()
     .single();
 

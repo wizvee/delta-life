@@ -11,7 +11,7 @@ function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route element={<ProtectedLayout />}>
         <Route path="/" element={<Home />} />
-        <Route path="/stat/:id" element={<StatPage />} />
+        <Route path="/stat/:statId" element={<StatPage />} />
       </Route>
     </Routes>
   );
