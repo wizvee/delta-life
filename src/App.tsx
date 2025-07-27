@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import StatPage from "./pages/StatPage";
 import LoginPage from "./pages/LoginPage";
 import ProjectPage from "./pages/ProjectPage";
+import OAuthCallback from "./pages/OAuthCallback";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/stat/:statId" element={<StatPage />} />
         <Route path="/project/:projectId" element={<ProjectPage />} />
+        <Route path="/oauth2callback" element={<OAuthCallback />} />
       </Route>
     </Routes>
   );

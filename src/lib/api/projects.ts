@@ -10,6 +10,7 @@ export type Project = {
   start_date?: string;
   end_date?: string;
   due_date?: string;
+  drive_folder_id?: string;
 };
 
 export async function createProject(userId: string, statId: string) {
