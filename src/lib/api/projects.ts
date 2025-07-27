@@ -46,3 +46,14 @@ export async function getProjectsByStat(statId: string): Promise<Project[]> {
   if (error) throw error;
   return data;
 }
+
+export async function getProjectById(projectId: string): Promise<Project> {
+  const { data, error } = await supabase
+    .from("projects")
+    .select("*")
+    .eq("id", projectId)
+    .single();
+
+  if (error) throw error;
+  return data;
+}
