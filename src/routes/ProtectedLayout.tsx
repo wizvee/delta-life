@@ -10,6 +10,7 @@ import {
   BreadcrumbLink,
   BreadcrumbList,
 } from "@/components/ui/breadcrumb";
+import { Toaster } from "@/components/ui/sonner";
 
 export function ProtectedLayout() {
   const navigate = useNavigate();
@@ -39,6 +40,7 @@ export function ProtectedLayout() {
 
   return (
     <div className="mx-auto max-w-3xl p-4">
+      <Toaster position="top-center" />
       <nav className="mb-3 p-1">
         <Breadcrumb>
           <BreadcrumbList className="text-xs text-neutral-400">

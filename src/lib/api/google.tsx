@@ -106,3 +106,31 @@ export async function uploadFileToDrive(
     throw new Error(result.error?.message || "Google Drive 업로드 실패");
   }
 }
+
+export async function listFilesInFolder(
+  accessToken: string,
+  folderId: string,
+): Promise<
+  {
+    id: string;
+    name: string;
+    mimeType: string;
+    webViewLink: string;
+  }[]
+> {
+  const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents&fields=files(id,name,webViewLink,mimeType)&orderBy=createdTime desc`;
+
+  const res = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  const data = await res.json();
+  if (!res.ok) {
+    console.error("파일 목록 불러오기 실패:", data);
+    throw new Error(data.error?.message || "Drive 목록 조회 실패");
+  }
+
+  return data.files;
+}
