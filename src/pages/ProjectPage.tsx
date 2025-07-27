@@ -114,7 +114,9 @@ export default function ProjectPage() {
           <TabsTrigger value="meeting">Meeting Notes</TabsTrigger>
         </TabsList>
         <ProjectOverview project={project} handleUpdate={handleUpdate} />
-        <TabsContent value="tasks">tasks</TabsContent>
+        <TabsContent value="tasks" className="mx-2 my-4 flex flex-col gap-8">
+          tasks
+        </TabsContent>
       </Tabs>
     </div>
   );

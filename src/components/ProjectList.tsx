@@ -30,7 +30,7 @@ function ProjectItem({ project }: { project: Project }) {
 
 export default function ProjectList({ list }: ProjectListProps) {
   return (
-    <div className="grid grid-cols-2 gap-2 py-4 md:grid-cols-3">
+    <div className="grid grid-cols-2 gap-2 pt-2 md:grid-cols-3">
       {list.map((project) => (
         <ProjectItem key={project.id} project={project} />
       ))}

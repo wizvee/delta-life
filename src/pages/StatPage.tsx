@@ -1,4 +1,4 @@
-import { Plus } from "lucide-react";
+import { Plus, Zap } from "lucide-react";
 import { useParams } from "react-router-dom";
 
 import { useUser } from "@/hooks/useUser";
@@ -20,7 +20,10 @@ interface TitleProps {
 function SectionTitle({ title, handleCreate }: TitleProps) {
   return (
     <div className="flex items-center justify-between">
-      <h2 className="font-semibold">{title}</h2>
+      <div className="flex items-center gap-1">
+        <Zap className="h-4.5 w-4.5 fill-neutral-500" />
+        <h2 className="font-semibold">{title}</h2>
+      </div>
       <button
         onClick={handleCreate}
         className="bg-background flex h-5 w-5 items-center justify-center rounded-full transition-colors duration-300 hover:bg-neutral-200"
@@ -40,7 +43,7 @@ function ProjectSection({ userId, statId }: Props) {
   };
 
   return (
-    <section className="rounded-md bg-neutral-100 px-3 py-1.5">
+    <section className="rounded-md bg-neutral-100 p-3">
       <SectionTitle title="PROJECTS" handleCreate={handleCreateProject} />
       <ProjectList list={projectList || []} />
     </section>
