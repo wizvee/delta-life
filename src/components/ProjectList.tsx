@@ -15,13 +15,13 @@ function ProjectItem({ project }: { project: Project }) {
     <div
       key={project.id}
       onClick={() => navigate(`/project/${project.id}`)}
-      className="rounded border border-neutral-200/80 bg-white px-3 py-2"
+      className="flex flex-col gap-0.5 rounded border border-neutral-200/80 bg-white px-3 py-2"
     >
       <h3 className="text-sm font-semibold">{project.title}</h3>
       <p className="text-sm text-gray-600">{project.description}</p>
       <div className="flex items-center gap-1 text-xs text-gray-400">
         <span>{formatDate(project.start_date)}</span>
-        <ArrowRight strokeWidth={3} className="h-3 w-3" />
+        <ArrowRight strokeWidth={2.5} className="h-3 w-3" />
         <span>{formatDate(project.end_date || project.due_date)}</span>
       </div>
     </div>

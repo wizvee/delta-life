@@ -39,7 +39,7 @@ export function ProtectedLayout() {
 
   return (
     <div className="mx-auto max-w-3xl p-4">
-      <nav className="mb-4 p-1">
+      <nav className="mb-3 p-1">
         <Breadcrumb>
           <BreadcrumbList className="text-xs text-neutral-400">
             <BreadcrumbItem>
