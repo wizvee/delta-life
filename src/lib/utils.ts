@@ -5,7 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatLgDate(date: Date | undefined) {
+export function formatDate(date: string | undefined) {
   if (!date) {
     return "";
   }
@@ -26,7 +26,7 @@ export function formatLgDate(date: Date | undefined) {
   // if (diffDays < 0) {
   //   return `${Math.abs(diffDays)} day${Math.abs(diffDays) === 1 ? "" : "s"} ago`;
   // }
-  return date.toLocaleDateString("en-US", {
+  return new Date(date).toLocaleDateString("en-US", {
     day: "2-digit",
     month: "long",
     year: "numeric",

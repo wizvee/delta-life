@@ -1,5 +1,8 @@
-import type { Project } from "@/lib/api/projects";
 import { useNavigate } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
+
+import { formatDate } from "@/lib/utils";
+import type { Project } from "@/lib/api/projects";
 
 interface ProjectListProps {
   list: Project[];
@@ -10,15 +13,17 @@ function ProjectItem({ project }: { project: Project }) {
 
   return (
     <div
-      key={project.stat_id}
+      key={project.id}
       onClick={() => navigate(`/project/${project.id}`)}
       className="rounded border border-neutral-200/80 bg-white px-3 py-2"
     >
       <h3 className="text-sm font-semibold">{project.title}</h3>
       <p className="text-sm text-gray-600">{project.description}</p>
-      <p className="text-xs text-gray-400">
-        {project.start_date} - {project.end_date}
-      </p>
+      <div className="flex items-center gap-1 text-xs text-gray-400">
+        <span>{formatDate(project.start_date)}</span>
+        <ArrowRight strokeWidth={3} className="h-3 w-3" />
+        <span>{formatDate(project.end_date || project.due_date)}</span>
+      </div>
     </div>
   );
 }

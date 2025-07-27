@@ -4,6 +4,13 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
 import type { Session } from "@supabase/supabase-js";
 
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+} from "@/components/ui/breadcrumb";
+
 export function ProtectedLayout() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
@@ -31,7 +38,16 @@ export function ProtectedLayout() {
   if (loading || !session) return null;
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-8">
+    <div className="mx-auto max-w-3xl p-4">
+      <nav className="mb-4 p-1">
+        <Breadcrumb>
+          <BreadcrumbList className="text-xs text-neutral-400">
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/">Home</BreadcrumbLink>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+      </nav>
       <Outlet />
     </div>
   );

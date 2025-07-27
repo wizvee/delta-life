@@ -1,5 +1,10 @@
 import { supabase } from "../supabase";
 
+export type Stat = {
+  id: string;
+  name: string;
+};
+
 export async function getStats(userId: string) {
   const { data, error } = await supabase
     .from("stats")

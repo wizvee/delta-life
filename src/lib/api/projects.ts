@@ -1,9 +1,10 @@
 import { supabase } from "../supabase";
+import type { Stat } from "./stats";
 
 export type Project = {
   id: string;
   user_id: string;
-  stat_id: string;
+  stat: Stat;
   title: string;
   description?: string;
   start_date?: string;
@@ -12,9 +13,17 @@ export type Project = {
 };
 
 export async function createProject(userId: string, statId: string) {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
   const { data, error } = await supabase
     .from("projects")
-    .insert({ user_id: userId, stat_id: statId, title: "New Project" })
+    .insert({
+      user_id: userId,
+      stat_id: statId,
+      title: "New Project",
+      start_date: today.toISOString(),
+    })
     .select()
     .single();
 
@@ -50,7 +59,7 @@ export async function getProjectsByStat(statId: string): Promise<Project[]> {
 export async function getProjectById(projectId: string): Promise<Project> {
   const { data, error } = await supabase
     .from("projects")
-    .select("*")
+    .select("*, stat:stats (id, name)")
     .eq("id", projectId)
     .single();
 
