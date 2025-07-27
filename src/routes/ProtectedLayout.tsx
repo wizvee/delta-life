@@ -31,7 +31,7 @@ export function ProtectedLayout() {
   if (loading || !session) return null;
 
   return (
-    <div className="px-4 py-2">
+    <div className="mx-auto max-w-3xl px-4 py-8">
       <Outlet />
     </div>
   );

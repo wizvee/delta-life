@@ -6,9 +6,9 @@ import { Progress } from "@/components/ui/progress";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-export default function ProjectDetail() {
+export default function ProjectPage() {
   return (
-    <div className="mx-auto max-w-2xl px-4 py-8">
+    <div>
       {/* Header */}
       <div className="mb-2 flex items-center gap-3">
         <RocketIcon className="h-6 w-6 text-gray-500" />
