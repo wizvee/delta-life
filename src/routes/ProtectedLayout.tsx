@@ -1,8 +1,10 @@
+import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 
 import { supabase } from "@/lib/supabase";
 import type { Session } from "@supabase/supabase-js";
+import useCurrentTask from "@/hooks/tasks/useCurrentTask";
 
 import {
   Breadcrumb,
@@ -11,6 +13,7 @@ import {
   BreadcrumbList,
 } from "@/components/ui/breadcrumb";
 import { Toaster } from "@/components/ui/sonner";
+import { useEndTask } from "@/hooks/tasks/useEndTask";
 
 export function ProtectedLayout() {
   const navigate = useNavigate();
@@ -35,6 +38,27 @@ export function ProtectedLayout() {
       navigate("/login", { replace: true });
     }
   }, [loading, session, navigate]);
+
+  const { data: currentTask } = useCurrentTask();
+  const { mutate: endTask } = useEndTask();
+
+  useEffect(() => {
+    if (currentTask) {
+      toast(`🔥 진행 중: ${currentTask.task_title}`, {
+        id: "current-task",
+        duration: Infinity,
+        action: {
+          label: "종료",
+          onClick: () => {
+            endTask({ logId: currentTask.id });
+            toast.dismiss("current-task");
+          },
+        },
+      });
+    } else {
+      toast.dismiss("current-task");
+    }
+  }, [currentTask, endTask]);
 
   if (loading || !session) return null;
 

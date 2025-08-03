@@ -1,5 +1,5 @@
-import { supabase } from "../supabase";
 import type { Stat } from "./stats";
+import { supabase } from "../supabase";
 
 export type Project = {
   id: string;

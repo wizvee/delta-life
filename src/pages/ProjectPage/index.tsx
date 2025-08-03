@@ -10,7 +10,6 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ProjectProperties from "./ProjectProperties";
 import ProjectOverview from "./ProjectOverview";
 import ProjectTasks from "./ProjectTasks";
-import ProjectFiles from "./ProjectFiles";
 
 export default function ProjectPage() {
   const { projectId } = useParams<{ projectId: string }>();
@@ -43,7 +42,7 @@ export default function ProjectPage() {
         </TabsList>
         <ProjectOverview project={project} handleUpdate={handleUpdate} />
         <ProjectTasks project={project} />
-        <ProjectFiles project={project} />
+        {/* <ProjectFiles project={project} /> */}
       </Tabs>
     </div>
   );
