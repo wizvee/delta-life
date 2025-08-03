@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { createProject, updateProject } from "@/lib/api/projects";
-import { createGoogleDriveFolder, getValidAccessToken } from "@/lib/api/google";
+import { createProject } from "@/lib/api/projects";
+// import { createGoogleDriveFolder, getValidAccessToken } from "@/lib/api/google";
 
 interface Props {
   userId: string;
@@ -14,11 +14,12 @@ export function useCreateProject() {
   return useMutation({
     mutationFn: async ({ userId, statId }: Props) => {
       const project = await createProject(userId, statId);
-      const accessToken = await getValidAccessToken(userId);
-      const folderId = await createGoogleDriveFolder(accessToken, project.id);
-      return updateProject(project.id, {
-        drive_folder_id: folderId,
-      });
+      // const accessToken = await getValidAccessToken(userId);
+      // const folderId = await createGoogleDriveFolder(accessToken, project.id);
+      // return updateProject(project.id, {
+      //   drive_folder_id: folderId,
+      // });
+      return project;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({

@@ -18,7 +18,7 @@ export function ProtectedLayout() {
   if (loading || !session) return null;
 
   return (
-    <div className="mx-auto max-w-3xl p-4">
+    <div className="mx-auto max-w-2xl p-4">
       <Toaster position="top-center" />
       <CurrentTaskManager />
       <nav className="mb-8 flex items-center justify-center gap-2 rounded-md bg-neutral-100 p-1 text-sm font-semibold">

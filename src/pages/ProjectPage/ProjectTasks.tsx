@@ -1,4 +1,4 @@
-import { Circle, CircleCheck, Timer } from "lucide-react";
+import { Circle, CircleCheck } from "lucide-react";
 
 import { formatDuration } from "@/lib/utils";
 import type { Project } from "@/lib/api/projects";
@@ -70,12 +70,10 @@ export default function ProjectTasks({ project }: Props) {
                 onClick={() => handleStartTask(task)}
               >
                 <span>{task.title}</span>
-                <span className="flex items-center gap-0.5 text-xs">
-                  {task.duration ? <Timer className="h-3 w-3" /> : null}
-                  {formatDuration(task.duration)}
-                </span>
               </div>
-
+              <span className="flex items-center gap-0.5 text-xs">
+                {formatDuration(task.duration)}
+              </span>
               {/* <ProjectTaskMenu task={task} /> */}
             </div>
           ))}
