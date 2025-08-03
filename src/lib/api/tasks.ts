@@ -31,7 +31,7 @@ export async function createTask(
   return data;
 }
 
-export async function updateProject(
+export async function updateTask(
   id: string,
   updates: Partial<Omit<Task, "id">>,
 ) {

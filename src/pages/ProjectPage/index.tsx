@@ -5,10 +5,11 @@ import { useProject } from "@/hooks/projects/useProject";
 import { useUpdateProject } from "@/hooks/projects/useUpdateProject";
 
 import { TitleEditor } from "@/components/TitleEditor";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import ProjectProperties from "./ProjectProperties";
 import ProjectOverview from "./ProjectOverview";
+import ProjectTasks from "./ProjectTasks";
 import ProjectFiles from "./ProjectFiles";
 
 export default function ProjectPage() {
@@ -41,9 +42,7 @@ export default function ProjectPage() {
           <TabsTrigger value="meeting">Meeting Notes</TabsTrigger> */}
         </TabsList>
         <ProjectOverview project={project} handleUpdate={handleUpdate} />
-        <TabsContent value="tasks" className="mx-2 my-4 flex flex-col gap-8">
-          tasks
-        </TabsContent>
+        <ProjectTasks project={project} />
         <ProjectFiles project={project} />
       </Tabs>
     </div>
