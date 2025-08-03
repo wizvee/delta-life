@@ -32,3 +32,19 @@ export function formatDate(date: string | undefined) {
     year: "numeric",
   });
 }
+
+export function formatDuration(m: number) {
+  const hours = Math.floor(m / 60);
+  const minutes = m % 60;
+  let result = "";
+
+  if (hours > 0) {
+    result += `${hours}h`;
+  }
+  if (minutes > 0) {
+    if (result) result += " ";
+    result += `${minutes}m`;
+  }
+
+  return result;
+}

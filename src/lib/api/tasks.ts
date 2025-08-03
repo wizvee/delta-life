@@ -8,7 +8,7 @@ export type Task = {
   status: "next" | "done" | "cancelled" | "someday" | "waiting";
   due_date?: string;
   due_time?: string;
-  duration_minutes: number;
+  duration: number;
 };
 
 export type TaskUpdate = Partial<Omit<Task, "id" | "user_id" | "project_id">>;
