@@ -36,7 +36,7 @@ export default function ProjectPage() {
         <TabsList>
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="tasks">Tasks</TabsTrigger>
-          <TabsTrigger value="files">Files</TabsTrigger>
+          {/* <TabsTrigger value="files">Files</TabsTrigger> */}
           {/* <TabsTrigger value="ideas">Ideas</TabsTrigger>
           <TabsTrigger value="meeting">Meeting Notes</TabsTrigger> */}
         </TabsList>
