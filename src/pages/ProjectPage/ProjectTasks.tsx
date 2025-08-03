@@ -1,4 +1,4 @@
-import { Circle, CircleCheck, Clock } from "lucide-react";
+import { Circle, CircleCheck, Timer } from "lucide-react";
 
 import { formatDuration } from "@/lib/utils";
 import type { Project } from "@/lib/api/projects";
@@ -8,7 +8,6 @@ import { useUser } from "@/hooks/useUser";
 import { useStartTask } from "@/hooks/tasks/useStartTask";
 import { useCreateTask } from "@/hooks/tasks/useCreateTask";
 import { useUpdateTask } from "@/hooks/tasks/useUpdateTask";
-import useTasksByProject from "@/hooks/tasks/useTasksByProject";
 
 import { Button } from "@/components/ui/button";
 import { TabsContent } from "@/components/ui/tabs";
@@ -30,16 +29,13 @@ export default function ProjectTasks({ project }: Props) {
     });
   };
 
-  const { data: tasks } = useTasksByProject(project.id);
   const { mutate, isError } = useUpdateTask();
-
   const handleUpdateTask = (taskId: string, updates: TaskUpdate) => {
     mutate({ taskId, updates });
     if (isError) console.error("Failed to update task.");
   };
 
   const { mutate: startTask } = useStartTask();
-
   const handleStartTask = (task: Task) => {
     if (!user || task.status === "done") return;
     startTask({ userId: user.id, taskId: task.id });
@@ -52,7 +48,7 @@ export default function ProjectTasks({ project }: Props) {
           Add
         </Button>
         <div className="mt-4 flex flex-col gap-1">
-          {tasks?.map((task) => (
+          {project.tasks?.map((task) => (
             <div
               key={task.id}
               className="flex items-center gap-2 p-1 text-sm hover:bg-neutral-50"
@@ -75,7 +71,7 @@ export default function ProjectTasks({ project }: Props) {
               >
                 <span>{task.title}</span>
                 <span className="flex items-center gap-0.5 text-xs">
-                  {task.duration ? <Clock className="h-3 w-3" /> : null}
+                  {task.duration ? <Timer className="h-3 w-3" /> : null}
                   {formatDuration(task.duration)}
                 </span>
               </div>

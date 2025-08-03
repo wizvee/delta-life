@@ -13,6 +13,12 @@ export function useEndTask() {
       queryClient.invalidateQueries({
         queryKey: ["current-task"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["projects"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["project"],
+      });
     },
   });
 }

@@ -43,16 +43,6 @@ export async function updateTask(
   return data;
 }
 
-export async function getTasksByProject(projectId: string): Promise<Task[]> {
-  const { data, error } = await supabase
-    .from("tasks")
-    .select("*")
-    .eq("project_id", projectId);
-
-  if (error) throw error;
-  return data;
-}
-
 export async function startTask(userId: string, taskId: string) {
   const { data, error } = await supabase
     .from("task_logs")

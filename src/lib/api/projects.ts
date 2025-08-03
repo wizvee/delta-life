@@ -1,5 +1,6 @@
-import type { Stat } from "./stats";
 import { supabase } from "../supabase";
+import type { Stat } from "./stats";
+import type { Task } from "./tasks";
 
 export type Project = {
   id: string;
@@ -10,6 +11,7 @@ export type Project = {
   start_date?: string;
   end_date?: string;
   due_date?: string;
+  tasks: Task[];
   drive_folder_id?: string;
 };
 
@@ -60,7 +62,7 @@ export async function getProjectsByStat(statId: string): Promise<Project[]> {
 export async function getProjectById(projectId: string): Promise<Project> {
   const { data, error } = await supabase
     .from("projects")
-    .select("*, stat:stats (id, name)")
+    .select("*, stat:stats (id, name), tasks (*)")
     .eq("id", projectId)
     .single();
 
