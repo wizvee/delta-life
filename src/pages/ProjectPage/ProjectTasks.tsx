@@ -5,9 +5,7 @@ import type { Project } from "@/lib/api/projects";
 import type { Task, TaskUpdate } from "@/lib/api/tasks";
 
 import { useUser } from "@/hooks/useUser";
-import { useStartTask } from "@/hooks/tasks/useStartTask";
-import { useCreateTask } from "@/hooks/tasks/useCreateTask";
-import { useUpdateTask } from "@/hooks/tasks/useUpdateTask";
+import { useTask } from "@/hooks/useTask";
 
 import { Button } from "@/components/ui/button";
 import { TabsContent } from "@/components/ui/tabs";
@@ -20,25 +18,23 @@ interface Props {
 
 export default function ProjectTasks({ project }: Props) {
   const user = useUser();
+  const { create, update, start } = useTask();
 
-  const createTask = useCreateTask();
   const handleCreateTask = () => {
-    createTask.mutate({
+    create.mutate({
       userId: project.user_id,
       projectId: project.id,
     });
   };
 
-  const { mutate, isError } = useUpdateTask();
   const handleUpdateTask = (taskId: string, updates: TaskUpdate) => {
-    mutate({ taskId, updates });
-    if (isError) console.error("Failed to update task.");
+    update.mutate({ taskId, updates });
+    if (update.isError) console.error("Failed to update task.");
   };
 
-  const { mutate: startTask } = useStartTask();
   const handleStartTask = (task: Task) => {
     if (!user || task.status === "done") return;
-    startTask({ userId: user.id, taskId: task.id });
+    start.mutate({ userId: user.id, taskId: task.id });
   };
 
   return (
