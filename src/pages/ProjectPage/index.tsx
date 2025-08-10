@@ -1,15 +1,15 @@
 import { useParams } from "react-router-dom";
 
-import type { EntityUpdate } from "@/lib/api/entities";
+import type { ProjectUpdate } from "@/lib/api/projects";
 import { useProject } from "@/hooks/projects/useProject";
 import { useProjectMutations } from "@/hooks/projects/useProjectMutations";
 
 import { TitleEditor } from "@/components/TitleEditor";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import ProjectProperties from "./ProjectProperties";
-import ProjectOverview from "./ProjectOverview";
 import ProjectTasks from "./ProjectTasks";
+import ProjectOverview from "./ProjectOverview";
+import ProjectProperties from "./ProjectProperties";
 
 export default function ProjectPage() {
   const { projectId } = useParams<{ projectId: string }>();
@@ -19,7 +19,7 @@ export default function ProjectPage() {
 
   if (!project) return <div>Error: Project not found</div>;
 
-  const handleUpdate = (updates: EntityUpdate) => {
+  const handleUpdate = (updates: ProjectUpdate) => {
     update.mutate({ projectId: project.id, updates });
     if (update.isError) console.error("Failed to update project.");
   };

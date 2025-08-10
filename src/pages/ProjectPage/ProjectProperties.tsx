@@ -1,15 +1,14 @@
 import { CalendarCheck2, Clock } from "lucide-react";
 
+import type { Task } from "@/lib/api/tasks";
 import { formatDate, formatDuration } from "@/lib/utils";
-import type { Project } from "@/lib/api/projects";
-import type { EntityUpdate } from "@/lib/api/entities";
+import type { Project, ProjectUpdate } from "@/lib/api/projects";
 
 import { DatePicker } from "@/components/DatePicker";
-import type { Task } from "@/lib/api/tasks";
 
 interface Props {
   project: Project;
-  handleUpdate: (updates: EntityUpdate) => void;
+  handleUpdate: (updates: ProjectUpdate) => void;
 }
 
 function sumDuration(tasks: Task[]) {

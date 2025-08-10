@@ -1,15 +1,14 @@
 import { CalendarDays, Sparkles } from "lucide-react";
 
 import { formatDate } from "@/lib/utils";
-import type { Project } from "@/lib/api/projects";
-import type { EntityUpdate } from "@/lib/api/entities";
+import type { Project, ProjectUpdate } from "@/lib/api/projects";
 
 import { TabsContent } from "@/components/ui/tabs";
 import { DatePicker } from "@/components/DatePicker";
 
 interface Props {
   project: Project;
-  handleUpdate: (updates: EntityUpdate) => void;
+  handleUpdate: (updates: ProjectUpdate) => void;
 }
 
 export default function ProjectOverview({ project, handleUpdate }: Props) {

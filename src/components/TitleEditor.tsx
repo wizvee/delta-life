@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
 import { RocketIcon } from "lucide-react";
-import type { EntityUpdate } from "@/lib/api/entities";
+import { useEffect, useState } from "react";
+import type { ProjectUpdate } from "@/lib/api/projects";
 
 interface TitleEditorProps {
   entity: { id: string; title: string };
   isPending: boolean;
-  handleUpdate: (updates: EntityUpdate) => void;
+  handleUpdate: (updates: ProjectUpdate) => void;
 }
 
 export function TitleEditor({
