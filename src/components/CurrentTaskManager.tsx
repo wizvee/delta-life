@@ -1,7 +1,6 @@
 import { toast } from "sonner";
 import { useEffect, useRef } from "react";
-import { useEndTask } from "@/hooks/tasks/useEndTask";
-import useCurrentTask from "@/hooks/tasks/useCurrentTask";
+import { useTask } from "@/hooks/useTask";
 
 function formatDuration(ms: number): string {
   const totalSeconds = Math.floor(ms / 1000);
@@ -12,8 +11,8 @@ function formatDuration(ms: number): string {
 
 export default function CurrentTaskManager() {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const { data: currentTask } = useCurrentTask();
-  const { mutate: endTask } = useEndTask();
+  const { end, current } = useTask();
+  const currentTask = current.data;
 
   useEffect(() => {
     if (!currentTask) {
@@ -37,7 +36,7 @@ export default function CurrentTaskManager() {
         action: {
           label: "End",
           onClick: () => {
-            endTask({ logId: currentTask.id });
+            end.mutate({ logId: currentTask.id });
             if (intervalRef.current) clearInterval(intervalRef.current);
             intervalRef.current = null;
             toast.dismiss("current-task");
@@ -51,7 +50,7 @@ export default function CurrentTaskManager() {
       intervalRef.current = null;
       toast.dismiss("current-task");
     };
-  }, [currentTask, endTask]);
+  }, [currentTask, end]);
 
   return null;
 }
