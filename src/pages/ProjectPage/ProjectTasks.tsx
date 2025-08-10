@@ -21,8 +21,9 @@ export default function ProjectTasks({ project }: Props) {
   const { create, update, start } = useTask();
 
   const handleCreateTask = () => {
+    if (!user) return;
     create.mutate({
-      userId: project.user_id,
+      userId: user.id,
       projectId: project.id,
     });
   };

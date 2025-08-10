@@ -4,7 +4,6 @@ import type { Task } from "./tasks";
 
 export type Project = {
   id: string;
-  user_id: string;
   stat: Stat;
   title: string;
   description?: string;
