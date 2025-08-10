@@ -1,36 +1,17 @@
-import { clsx, type ClassValue } from "clsx";
+import dayjs from "dayjs";
 import { twMerge } from "tailwind-merge";
+import isoWeek from "dayjs/plugin/isoWeek";
+import { clsx, type ClassValue } from "clsx";
+
+dayjs.extend(isoWeek);
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatDate(date: string | undefined) {
-  if (!date) {
-    return "";
-  }
-  // const now = new Date();
-  // // 날짜만 비교 (시간 무시)
-  // const target = new Date(date);
-  // target.setHours(0, 0, 0, 0);
-  // now.setHours(0, 0, 0, 0);
-  // const diffTime = target.getTime() - now.getTime();
-  // const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
-
-  // if (diffDays === 0) {
-  //   return "Today";
-  // }
-  // if (diffDays > 0 && diffDays <= 7) {
-  //   return `In ${diffDays} day${diffDays === 1 ? "" : "s"}`;
-  // }
-  // if (diffDays < 0) {
-  //   return `${Math.abs(diffDays)} day${Math.abs(diffDays) === 1 ? "" : "s"} ago`;
-  // }
-  return new Date(date).toLocaleDateString("en-US", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  });
+export function formatDate(date: string | undefined): string {
+  if (!date) return "";
+  return dayjs(date).format("MMM DD, YYYY");
 }
 
 export function formatDuration(m: number) {
@@ -47,4 +28,27 @@ export function formatDuration(m: number) {
   }
 
   return result;
+}
+
+export function getWeekStart(dateStr?: string | undefined) {
+  return dayjs(dateStr).startOf("isoWeek").format("YYYY-MM-DD");
+}
+
+export function getWeekRange(dateStr?: string | undefined) {
+  const date = dayjs(dateStr);
+  const monday = date.startOf("isoWeek");
+  const sunday = monday.endOf("isoWeek");
+  return {
+    monday: monday.format("YYYY-MM-DD"),
+    sunday: sunday.format("YYYY-MM-DD"),
+    weekNumber: date.isoWeek(),
+    year: date.isoWeekYear(),
+  };
+}
+
+export function prevWeekStart(mondayStr: string | undefined) {
+  return dayjs(mondayStr).subtract(1, "week").format("YYYY-MM-DD");
+}
+export function nextWeekStart(mondayStr: string | undefined) {
+  return dayjs(mondayStr).add(1, "week").format("YYYY-MM-DD");
 }

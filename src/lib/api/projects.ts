@@ -69,3 +69,17 @@ export async function getProjectById(projectId: string): Promise<Project> {
   if (error) throw error;
   return data;
 }
+
+export async function getProjectsInRange(
+  start: string,
+  end: string,
+): Promise<Project[]> {
+  const { data, error } = await supabase
+    .from("projects")
+    .select("*")
+    .lte("start_date", end)
+    .gte("due_date", start);
+
+  if (error) throw error;
+  return data;
+}

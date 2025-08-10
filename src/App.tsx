@@ -1,11 +1,13 @@
 import { Route, Routes } from "react-router-dom";
 import { ProtectedLayout } from "./routes/ProtectedLayout";
 
+import LoginPage from "./pages/LoginPage";
+// import OAuthCallback from "./pages/OAuthCallback";
+
 import Home from "./pages/Home";
 import StatPage from "./pages/StatPage";
-import LoginPage from "./pages/LoginPage";
+import WeeklyPage from "./pages/WeeklyPage";
 import ProjectPage from "./pages/ProjectPage";
-import OAuthCallback from "./pages/OAuthCallback";
 
 function App() {
   return (
@@ -14,8 +16,9 @@ function App() {
       <Route element={<ProtectedLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/stat/:statId" element={<StatPage />} />
+        <Route path="/weekly/:weekStart" element={<WeeklyPage />} />
         <Route path="/project/:projectId" element={<ProjectPage />} />
-        <Route path="/oauth2callback" element={<OAuthCallback />} />
+        {/* <Route path="/oauth2callback" element={<OAuthCallback />} /> */}
       </Route>
     </Routes>
   );
