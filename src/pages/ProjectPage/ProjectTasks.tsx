@@ -9,6 +9,7 @@ import { useTask } from "@/hooks/useTask";
 
 import { Button } from "@/components/ui/button";
 import { TabsContent } from "@/components/ui/tabs";
+import { toast } from "sonner";
 
 // import ProjectTaskMenu from "./ProjectTaskMenu";
 
@@ -18,7 +19,7 @@ interface Props {
 
 export default function ProjectTasks({ project }: Props) {
   const user = useUser();
-  const { create, update, start } = useTask();
+  const { create, update, start, current } = useTask();
 
   const handleCreateTask = () => {
     if (!user) return;
@@ -35,6 +36,10 @@ export default function ProjectTasks({ project }: Props) {
 
   const handleStartTask = (task: Task) => {
     if (!user || task.status === "done") return;
+    if (current.data) {
+      toast.error("Another task is already in progress.");
+      return;
+    }
     start.mutate({ userId: user.id, taskId: task.id });
   };
 

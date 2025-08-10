@@ -52,3 +52,11 @@ export function prevWeekStart(mondayStr: string | undefined) {
 export function nextWeekStart(mondayStr: string | undefined) {
   return dayjs(mondayStr).add(1, "week").format("YYYY-MM-DD");
 }
+
+export function calcCompletionRate(goals: { is_completed: boolean }[]) {
+  const total = goals.length;
+  if (total === 0) return { rate: 0, completed: 0, total: 0 };
+  const completed = goals.filter((g) => g.is_completed).length;
+  const rate = Math.round((completed / total) * 100);
+  return { rate, completed, total };
+}

@@ -80,7 +80,7 @@ export type TaskLog = {
   end_time?: string;
 };
 
-export async function getCurrentTask(userId: string): Promise<TaskLog> {
+export async function getCurrentTask(userId: string): Promise<TaskLog | null> {
   if (!userId) throw new Error("User ID is required to get current task");
 
   const { data, error } = await supabase
@@ -90,9 +90,10 @@ export async function getCurrentTask(userId: string): Promise<TaskLog> {
     .is("end_time", null)
     .maybeSingle();
 
-  const task = Array.isArray(data.task) ? data.task[0] : data.task;
-
   if (error) throw error;
+  if (!data) return null;
+
+  const task = Array.isArray(data.task) ? data.task[0] : data.task;
   return {
     id: data.id,
     task_id: data.task_id,

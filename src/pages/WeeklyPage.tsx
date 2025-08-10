@@ -3,16 +3,22 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 
 import {
   formatDate,
+  formatDuration,
   getWeekRange,
   nextWeekStart,
   prevWeekStart,
 } from "@/lib/utils";
-import { useProjectsInRange } from "@/hooks/projects/useProjectInRange";
+// import { useProjectsInRange } from "@/hooks/projects/useProjectInRange";
+import { useWeeklyCompletion } from "@/hooks/weekly/useWeeklyCompletion";
+import { useWeeklyMinutes } from "@/hooks/weekly/useWeeklyMinutes";
 
 export default function WeeklyPage() {
   const { weekStart } = useParams<{ weekStart: string }>();
   const { monday, sunday, weekNumber, year } = getWeekRange(weekStart);
-  const { data: projects } = useProjectsInRange(monday, sunday);
+
+  // const { data: projects } = useProjectsInRange(monday, sunday);
+  const { data: completion } = useWeeklyCompletion(monday);
+  const { data: totalMinutes } = useWeeklyMinutes(monday, sunday);
 
   return (
     <div>
@@ -38,7 +44,9 @@ export default function WeeklyPage() {
         <ArrowRight strokeWidth={2.5} className="h-3 w-3" />
         <span>{formatDate(sunday)}</span>
       </div>
-      <div className="flex flex-col gap-4">
+      <div>이번 주 달성률: {completion?.rate}%</div>
+      <div>이번 주 사용시간: {formatDuration(totalMinutes ?? 0)}</div>
+      {/* <div className="flex flex-col gap-4">
         {projects?.map((project) => (
           <div key={project.id} className="flex flex-col gap-0.5">
             <div>
@@ -51,7 +59,7 @@ export default function WeeklyPage() {
             </div>
           </div>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 }
