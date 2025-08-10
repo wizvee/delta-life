@@ -20,14 +20,14 @@ export function formatDuration(m: number) {
   let result = "";
 
   if (m === 0) {
-    result += `0m`;
+    result += `0분`;
   }
   if (hours > 0) {
-    result += `${hours}h`;
+    result += `${hours}시간`;
   }
   if (minutes > 0) {
     if (result) result += " ";
-    result += `${minutes}m`;
+    result += `${minutes}분`;
   }
 
   return result;
@@ -62,6 +62,17 @@ export function calcCompletionRate(goals: { is_completed: boolean }[]) {
   const total = goals.length;
   if (total === 0) return { rate: 0, completed: 0, total: 0 };
   const completed = goals.filter((g) => g.is_completed).length;
-  const rate = Math.round((completed / total) * 100);
+  const rate = Math.round((completed / total) * 100) / 100;
   return { rate, completed, total };
+}
+
+export function getPercentColor(value: number) {
+  switch (true) {
+    case value <= 0.3:
+      return "stroke-[#ff8e7d]";
+    case value <= 0.6:
+      return "stroke-[#f7dd7d]";
+    default:
+      return "stroke-[#87dc8a]";
+  }
 }

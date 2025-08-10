@@ -19,7 +19,7 @@ function ProjectItem({ project }: { project: Project }) {
     >
       <h3 className="text-sm font-semibold">{project.title}</h3>
       <p className="text-sm text-gray-600">{project.description}</p>
-      <div className="flex items-center gap-1 text-xs text-gray-400">
+      <div className="flex items-center gap-1 text-xs text-neutral-400">
         <span>{formatDate(project.start_date)}</span>
         <ArrowRight strokeWidth={2.5} className="h-3 w-3" />
         <span>{formatDate(project.end_date || project.due_date)}</span>

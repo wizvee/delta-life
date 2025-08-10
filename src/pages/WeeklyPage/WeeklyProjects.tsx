@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Pencil, Plus, Star, Timer } from "lucide-react";
+import { Pencil, Plus, Star } from "lucide-react";
 
 import { useUser } from "@/hooks/useUser";
 import { formatDuration } from "@/lib/utils";
@@ -37,19 +37,18 @@ export default function WeeklyProjects({
   return (
     <div className="flex flex-col gap-1 rounded-sm border border-neutral-200/80 bg-white px-3 py-2">
       <h3 className="font-semibold">{project.title}</h3>
-      <div className="mb-1.5 flex items-center gap-2 text-sm text-neutral-500">
-        <span className="flex items-center gap-0.5 font-semibold">
-          <Timer strokeWidth={2.5} className="h-3.5 w-3.5" />
-          Time Spent
+      <div className="mb-2 flex items-center gap-1 text-xs text-neutral-400">
+        <span className="flex items-center gap-0.5">사용 시간:</span>
+        <span className="font-semibold">
+          {formatDuration(project.total_minutes ?? 0)}
         </span>
-        <span>{formatDuration(project.total_minutes ?? 0)}</span>
       </div>
       <div className="flex justify-between">
-        <h4 className="text-sm font-semibold">Goals</h4>
+        <h4 className="text-sm font-semibold">목표</h4>
         {isThisWeek && (
           <button
             onClick={() => handleCreateGoal(project.id)}
-            className="bg-background flex h-4 w-4 items-center justify-center rounded-full transition-colors duration-300 hover:bg-neutral-200"
+            className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full transition-colors duration-300 hover:bg-neutral-200"
           >
             <Plus className="h-3 w-3" />
           </button>
@@ -61,12 +60,13 @@ export default function WeeklyProjects({
             <Goal
               key={goal.id}
               goal={goal}
+              isThisWeek={isThisWeek}
               handleUpdate={handleUpdateGoal}
               handleToggle={handleToggleGoal}
             />
           ))
         ) : (
-          <div className="text-sm">목표 없음</div>
+          <div className="text-xs">Empty</div>
         )}
       </div>
     </div>
@@ -75,11 +75,12 @@ export default function WeeklyProjects({
 
 interface GoalProps {
   goal: WeeklyGoal;
+  isThisWeek: boolean;
   handleUpdate: (id: string, title: string) => void;
   handleToggle: (id: string, next: boolean) => void;
 }
 
-function Goal({ goal, handleUpdate, handleToggle }: GoalProps) {
+function Goal({ goal, isThisWeek, handleUpdate, handleToggle }: GoalProps) {
   const [editingGoalId, setEditingGoalId] = useState<string | null>(null);
   const [editingTitle, setEditingTitle] = useState<string>("");
 
@@ -96,13 +97,16 @@ function Goal({ goal, handleUpdate, handleToggle }: GoalProps) {
 
   return (
     <div className="group flex items-center gap-1 rounded-sm py-0.5 text-sm hover:bg-neutral-50">
-      <div onClick={() => handleToggle(goal.id, !goal.is_completed)}>
+      <button
+        className={isThisWeek ? "cursor-pointer" : ""}
+        onClick={() => handleToggle(goal.id, !goal.is_completed)}
+      >
         {goal.is_completed ? (
-          <Star fill="#fce5a0" className="h-4 w-4 text-[#fce5a0]" />
+          <Star fill="#f7dd7d" className="h-4 w-4" />
         ) : (
           <Star className="h-4 w-4" />
         )}
-      </div>
+      </button>
       <div className="flex flex-1 flex-col">
         {editingGoalId === goal.id ? (
           <input
@@ -121,12 +125,14 @@ function Goal({ goal, handleUpdate, handleToggle }: GoalProps) {
           <span>{goal.title}</span>
         )}
       </div>
-      <button
-        onClick={() => startEditGoal(goal)}
-        className="text-neutral-300 hover:text-neutral-400"
-      >
-        <Pencil className="invisible h-3.5 w-3.5 group-hover:visible" />
-      </button>
+      {isThisWeek && (
+        <button
+          onClick={() => startEditGoal(goal)}
+          className="cursor-pointer text-neutral-300 hover:text-neutral-400"
+        >
+          <Pencil className="invisible h-3.5 w-3.5 group-hover:visible" />
+        </button>
+      )}
     </div>
   );
 }
