@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 
 import { useUser } from "@/hooks/useUser";
 import { useProjectsByStat } from "@/hooks/projects/useProjectsByStat";
-import { useCreateProject } from "@/hooks/projects/useCreateProject";
+import { useProjectMutations } from "@/hooks/projects/useProjectMutations";
 
 import ProjectList from "@/components/ProjectList";
 
@@ -37,9 +37,9 @@ function SectionTitle({ title, handleCreate }: TitleProps) {
 function ProjectSection({ userId, statId }: Props) {
   const { data: projectList } = useProjectsByStat(statId);
 
-  const createProject = useCreateProject();
+  const { create } = useProjectMutations();
   const handleCreateProject = () => {
-    createProject.mutate({ userId, statId });
+    create.mutate({ userId, title: statId });
   };
 
   return (

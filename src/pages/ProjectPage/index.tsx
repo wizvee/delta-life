@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 
 import type { EntityUpdate } from "@/lib/api/entities";
 import { useProject } from "@/hooks/projects/useProject";
-import { useUpdateProject } from "@/hooks/projects/useUpdateProject";
+import { useProjectMutations } from "@/hooks/projects/useProjectMutations";
 
 import { TitleEditor } from "@/components/TitleEditor";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -15,20 +15,20 @@ export default function ProjectPage() {
   const { projectId } = useParams<{ projectId: string }>();
   const { data: project } = useProject(projectId || "");
 
-  const { mutate, isPending, isError } = useUpdateProject();
+  const { update } = useProjectMutations();
 
   if (!project) return <div>Error: Project not found</div>;
 
   const handleUpdate = (updates: EntityUpdate) => {
-    mutate({ projectId: project.id, updates });
-    if (isError) console.error("Failed to update project.");
+    update.mutate({ projectId: project.id, updates });
+    if (update.isError) console.error("Failed to update project.");
   };
 
   return (
     <div className="flex flex-col gap-2">
       <TitleEditor
         entity={project}
-        isPending={isPending}
+        isPending={update.isPending}
         handleUpdate={handleUpdate}
       />
       <ProjectProperties project={project} handleUpdate={handleUpdate} />

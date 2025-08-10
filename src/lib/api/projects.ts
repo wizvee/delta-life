@@ -15,6 +15,10 @@ export type Project = {
   drive_folder_id?: string;
 };
 
+export type ProjectUpdate = Partial<
+  Omit<Project, "id" | "user_id" | "project_id">
+>;
+
 export async function createProject(userId: string, statId: string) {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -34,10 +38,7 @@ export async function createProject(userId: string, statId: string) {
   return data;
 }
 
-export async function updateProject(
-  id: string,
-  updates: Partial<Omit<Project, "id">>,
-) {
+export async function updateProject(id: string, updates: ProjectUpdate) {
   const { data, error } = await supabase
     .from("projects")
     .update({ ...updates, updated_at: new Date().toISOString() })
