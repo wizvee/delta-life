@@ -19,6 +19,9 @@ export function formatDuration(m: number) {
   const minutes = m % 60;
   let result = "";
 
+  if (m === 0) {
+    result += `0m`;
+  }
   if (hours > 0) {
     result += `${hours}h`;
   }
@@ -41,8 +44,10 @@ export function getWeekRange(dateStr?: string | undefined) {
   return {
     monday: monday.format("YYYY-MM-DD"),
     sunday: sunday.format("YYYY-MM-DD"),
+    year: date.isoWeekYear(),
+    weekNumber: date.isoWeek(),
     nextMonday: nextWeekStart(dateStr),
-    title: `${date.isoWeekYear()}-W${date.isoWeek()}`,
+    isThisWeek: dayjs().startOf("isoWeek").isSame(monday),
   };
 }
 
