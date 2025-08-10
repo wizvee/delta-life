@@ -5,29 +5,27 @@ import {
   fetchWeeklyProjectMinutes,
 } from "@/lib/api/weekly";
 
-export function useWeeklyProjects(monday: string, weekEnd: string) {
+export function useWeeklyProjects(weekStart: string, weekEnd: string) {
   const projectsQ = useQuery({
-    queryKey: ["projects", "weekly", monday],
-    queryFn: () => getProjectsInRange(monday, weekEnd),
-    enabled: !!monday && !!weekEnd,
+    queryKey: ["projects", "weekly", weekStart],
+    queryFn: () => getProjectsInRange(weekStart, weekEnd),
+    enabled: !!weekStart && !!weekEnd,
   });
   const goalsQ = useQuery({
-    queryKey: ["weeklyGoalsByWeek", monday],
-    queryFn: () => fetchWeeklyGoalsByWeek({ monday }),
+    queryKey: ["weeklyGoalsByWeek", weekStart],
+    queryFn: () => fetchWeeklyGoalsByWeek({ weekStart }),
   });
   const minutesQ = useQuery({
-    queryKey: ["weeklyProjectMinutes", monday],
-    queryFn: () => fetchWeeklyProjectMinutes({ monday }),
+    queryKey: ["weeklyProjectMinutes", weekStart],
+    queryFn: () => fetchWeeklyProjectMinutes({ weekStart }),
   });
-
-  const minutesByProject = Object.fromEntries(
-    (minutesQ.data ?? []).map((m) => [m.project_id, m.total_minutes ?? 0]),
-  );
 
   const projects = (projectsQ?.data ?? []).map((project) => ({
     ...project,
-    goals: goalsQ?.data ?? [],
-    total_minutes: minutesByProject[project.id] ?? 0,
+    goals: (goalsQ.data ?? []).filter((g) => g.project_id === project.id),
+    total_minutes:
+      (minutesQ.data ?? []).find((m) => m.project_id === project.id)
+        ?.total_minutes ?? 0,
   }));
 
   return {

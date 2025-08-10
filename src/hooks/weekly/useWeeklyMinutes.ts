@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchWeeklyTotalMinutes } from "@/lib/api/weekly";
 
-export function useWeeklyMinutes(monday: string, nextMonday: string) {
+export function useWeeklyMinutes(weekStart: string, nextWeekStart: string) {
   return useQuery({
-    queryKey: ["weeklyMinutes", monday],
-    queryFn: () => fetchWeeklyTotalMinutes({ monday, nextMonday }),
+    queryKey: ["weeklyMinutes", nextWeekStart],
+    queryFn: () => fetchWeeklyTotalMinutes({ weekStart, nextWeekStart }),
   });
 }
