@@ -41,8 +41,8 @@ export function getWeekRange(dateStr?: string | undefined) {
   return {
     monday: monday.format("YYYY-MM-DD"),
     sunday: sunday.format("YYYY-MM-DD"),
-    weekNumber: date.isoWeek(),
-    year: date.isoWeekYear(),
+    nextMonday: nextWeekStart(dateStr),
+    title: `${date.isoWeekYear()}-W${date.isoWeek()}`,
   };
 }
 
