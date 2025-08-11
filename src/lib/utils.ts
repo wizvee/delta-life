@@ -1,8 +1,10 @@
 import dayjs from "dayjs";
 import { twMerge } from "tailwind-merge";
+import minMax from "dayjs/plugin/minMax";
 import isoWeek from "dayjs/plugin/isoWeek";
 import { clsx, type ClassValue } from "clsx";
 
+dayjs.extend(minMax);
 dayjs.extend(isoWeek);
 
 export function cn(...inputs: ClassValue[]) {
@@ -67,4 +69,52 @@ export function getPercentColor(value: number) {
     default:
       return "stroke-[#87dc8a]";
   }
+}
+
+export interface WeekSpan {
+  weekNumber: number;
+  startDate: string; // YYYY-MM-DD
+  endDate: string; // YYYY-MM-DD
+}
+
+/**
+ * ISO-8601 기준(월~일)으로 주차를 나눕니다.
+ * - 첫 주는 startDate 당일 시작
+ * - 각 주 endDate = min(그 주의 일요일, dueDate)
+ * - 날짜 문자열은 YYYY-MM-DD로 반환
+ */
+export function splitIntoIsoWeeks(
+  startDate: string | Date,
+  dueDate: string | Date,
+): WeekSpan[] {
+  const start = dayjs(startDate).startOf("day");
+  const end = dayjs(dueDate).startOf("day");
+
+  if (!start.isValid() || !end.isValid()) {
+    throw new Error("Invalid date input.");
+  }
+  if (end.isBefore(start)) {
+    // 시작이 마감보다 늦으면 빈 배열
+    return [];
+  }
+
+  const out: WeekSpan[] = [];
+  let weekNo = 1;
+  let cursor = start;
+
+  while (cursor.isSame(end) || cursor.isBefore(end)) {
+    // 해당 ISO 주의 일요일(= endOf('isoWeek'))과 dueDate 중 더 이른 날짜
+    const weekEnd = dayjs.min(cursor.endOf("isoWeek"), end)!;
+
+    out.push({
+      weekNumber: weekNo++,
+      startDate: cursor.format("YYYY-MM-DD"),
+      endDate: weekEnd.format("YYYY-MM-DD"),
+    });
+
+    // 다음 주의 시작(바로 다음 날)
+    cursor = weekEnd.add(1, "day");
+  }
+
+  return out;
 }

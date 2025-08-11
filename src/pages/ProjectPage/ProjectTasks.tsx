@@ -1,92 +1,75 @@
 import dayjs from "dayjs";
-import { toast } from "sonner";
-import { Circle, CircleCheck } from "lucide-react";
+import { useCallback, useMemo } from "react";
+import isBetween from "dayjs/plugin/isBetween";
 
-import { formatDuration } from "@/lib/utils";
-import type { Project } from "@/lib/api/projects";
-import type { Task, TaskUpdate } from "@/lib/api/tasks";
-
-import { useUser } from "@/hooks/useUser";
 import { useTask } from "@/hooks/useTask";
+import type { Task } from "@/lib/api/tasks";
+import { splitIntoIsoWeeks } from "@/lib/utils";
+import type { Project } from "@/lib/api/projects";
 
-import { Button } from "@/components/ui/button";
 import { TabsContent } from "@/components/ui/tabs";
+import { WeekSection } from "./ProjectTasksWeekSection";
 
-// import ProjectTaskMenu from "./ProjectTaskMenu";
+dayjs.extend(isBetween);
 
 interface Props {
   project: Project;
 }
 
 export default function ProjectTasks({ project }: Props) {
-  const user = useUser();
-  const { create, update, start, current } = useTask();
+  const { start_date: startDate, due_date: dueDate, tasks } = project;
+  const { create } = useTask();
 
-  const handleCreateTask = () => {
-    if (!user) return;
-    create.mutate({
-      userId: user.id,
-      projectId: project.id,
-    });
-  };
+  const sections = useMemo(
+    () => splitIntoIsoWeeks(startDate, dueDate),
+    [startDate, dueDate],
+  );
 
-  const handleUpdateTask = (taskId: string, updates: TaskUpdate) => {
-    update.mutate({ taskId, updates });
-    if (update.isError) console.error("Failed to update task.");
-  };
-
-  const handleStartTask = (task: Task) => {
-    if (!user || task.status === "done") return;
-    if (current.data) {
-      toast.error("Another task is already in progress.");
-      return;
+  const tasksBySection = useMemo(() => {
+    const map = new Map<number, Task[]>();
+    for (const s of sections) map.set(s.weekNumber, []);
+    for (const t of tasks) {
+      for (const s of sections) {
+        if (dayjs(t.due_date).isBetween(s.startDate, s.endDate, "day", "[]")) {
+          map.get(s.weekNumber)!.push(t);
+          break;
+        }
+      }
     }
-    start.mutate({ userId: user.id, taskId: task.id });
-  };
+    return map;
+  }, [sections, tasks]);
+
+  const handleCreateTask = useCallback(
+    (due: string) => {
+      create.mutate({
+        userId: project.user_id,
+        projectId: project.id,
+        dueDate: due,
+      });
+    },
+    [create, project.id, project.user_id],
+  );
+
+  if (!sections.length) {
+    return (
+      <TabsContent value="tasks" className="my-2">
+        <div className="rounded-md border p-4 text-sm text-neutral-500">
+          유효한 기간이 없어 주차가 생성되지 않았어요.
+        </div>
+      </TabsContent>
+    );
+  }
 
   return (
-    <TabsContent value="tasks" className="mx-2 my-4 flex flex-col gap-8">
-      <section>
-        <Button size="sm" onClick={handleCreateTask}>
-          Add
-        </Button>
-        <div className="mt-4 flex flex-col gap-1">
-          {project.tasks?.map((task) => (
-            <div
-              key={task.id}
-              className="flex items-center gap-2 p-1 text-sm hover:bg-neutral-50"
-            >
-              <div
-                onClick={() =>
-                  handleUpdateTask(task.id, {
-                    status: "done",
-                    end_date: dayjs().format("YYYY-MM-DD"),
-                  })
-                }
-              >
-                {task.status === "done" ? (
-                  <CircleCheck
-                    strokeWidth={2.5}
-                    className="h-4.5 w-4.5 text-[#94af7a]"
-                  />
-                ) : (
-                  <Circle strokeWidth={2.5} className="h-4.5 w-4.5" />
-                )}
-              </div>
-              <div
-                className="flex flex-1 flex-col"
-                onClick={() => handleStartTask(task)}
-              >
-                <span>{task.title}</span>
-              </div>
-              <span className="flex items-center gap-0.5 text-xs">
-                {formatDuration(task.duration)}
-              </span>
-              {/* <ProjectTaskMenu task={task} /> */}
-            </div>
-          ))}
-        </div>
-      </section>
+    <TabsContent value="tasks" className="my-2 flex flex-col gap-4">
+      {sections.map((s) => (
+        <WeekSection
+          key={`${s.startDate}-${s.endDate}`}
+          section={s}
+          tasks={tasksBySection.get(s.weekNumber) ?? []}
+          onCreateTask={handleCreateTask}
+        />
+      ))}
     </TabsContent>
   );
 }

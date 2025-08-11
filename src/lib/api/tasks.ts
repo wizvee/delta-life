@@ -5,7 +5,7 @@ export type Task = {
   user_id: string;
   project_id: string;
   title: string;
-  status: "next" | "done" | "cancelled" | "someday" | "waiting";
+  status: string;
   due_date?: string;
   due_time?: string;
   end_date?: string;
@@ -14,13 +14,18 @@ export type Task = {
 
 export type TaskUpdate = Partial<Omit<Task, "id" | "user_id" | "project_id">>;
 
-export async function createTask(userId: string, projectId: string) {
+export async function createTask(
+  userId: string,
+  projectId: string,
+  dueDate: string,
+) {
   const { data, error } = await supabase
     .from("tasks")
     .insert({
       user_id: userId,
       project_id: projectId,
       title: "New Task",
+      due_date: dueDate,
     })
     .select()
     .single();

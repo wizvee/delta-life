@@ -6,20 +6,19 @@ import type { Task } from "./tasks";
 export type Project = {
   id: string;
   stat: Stat;
+  user_id: string;
   title: string;
   description?: string;
-  start_date?: string;
+  start_date: string;
+  due_date: string;
   end_date?: string;
-  due_date?: string;
   tasks: Task[];
   // options
   total_minutes?: number;
   drive_folder_id?: string;
 };
 
-export type ProjectUpdate = Partial<
-  Omit<Project, "id" | "user_id" | "project_id">
->;
+export type ProjectUpdate = Partial<Omit<Project, "id" | "user_id" | "stat">>;
 
 export async function createProject(userId: string, statId: string) {
   const today = dayjs();

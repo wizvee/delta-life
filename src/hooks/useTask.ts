@@ -18,10 +18,12 @@ export function useTask() {
     mutationFn: ({
       userId,
       projectId,
+      dueDate,
     }: {
       userId: string;
       projectId: string;
-    }) => createTask(userId, projectId),
+      dueDate: string;
+    }) => createTask(userId, projectId, dueDate),
     onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({
         queryKey: ["tasks"],
