@@ -59,7 +59,7 @@
     "Segoe UI Emoji",
     "Segoe UI Symbol",
     sans-serif;
-  font-feature-settings: "tnum";
+  /* font-feature-settings: "tnum"; */
 
   --radius: 0.625rem;
   --background: oklch(1 0 0);

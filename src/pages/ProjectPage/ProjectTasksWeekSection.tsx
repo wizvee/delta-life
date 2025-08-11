@@ -60,7 +60,7 @@ export const WeekSection = memo(function WeekSection({
             dayjs(t.due_date).isBetween(startDate, endDate, "day", "[]"),
           )
           .map((t) => (
-            <li key={t.id} className="flex items-center gap-2">
+            <li key={t.id} className="flex items-center gap-2.5">
               <StatusIcon status={t.status} />
               <div className="flex flex-col gap-0.5">
                 <span>{t.title}</span>
@@ -78,13 +78,13 @@ export const WeekSection = memo(function WeekSection({
 
 function StatusIcon({ status }: { status: string }) {
   if (status === "done") {
-    return <CircleCheck fill="#87dc8a" className="h-4 w-4" />;
+    return <CircleCheck fill="#87dc8a" className="h-4.5 w-4.5" />;
   }
   if (status === "deferred") {
-    return <CircleArrowRight fill="#f7dd7d" className="h-4 w-4" />;
+    return <CircleArrowRight fill="#f7dd7d" className="h-4.5 w-4.5" />;
   }
   if (status === "cancelled") {
-    return <CircleX fill="#ff8e7d" className="h-4 w-4" />;
+    return <CircleX fill="#ff8e7d" className="h-4.5 w-4.5" />;
   }
-  return <Circle className="h-4 w-4" />;
+  return <Circle className="h-4.5 w-4.5" />;
 }
