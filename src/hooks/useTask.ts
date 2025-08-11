@@ -24,7 +24,7 @@ export function useTask() {
     }) => createTask(userId, projectId),
     onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({
-        queryKey: ["tasks", "byProject", variables.projectId],
+        queryKey: ["tasks"],
       });
       queryClient.invalidateQueries({
         queryKey: ["project", variables.projectId],
@@ -59,6 +59,7 @@ export function useTask() {
       queryClient.invalidateQueries({ queryKey: ["current-task"] });
       queryClient.invalidateQueries({ queryKey: ["projects"] });
       queryClient.invalidateQueries({ queryKey: ["project"] });
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
     },
   });
 

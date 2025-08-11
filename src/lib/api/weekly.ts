@@ -6,66 +6,36 @@ interface Props {
   nextWeekStart?: string;
 }
 
-export type WeeklyGoal = {
-  id: string;
-  project_id: string;
-  week_start?: string;
-  title: string;
-  is_completed: boolean;
-};
-
-export type GoalUpdate = Partial<Omit<WeeklyGoal, "id" | "project_id">>;
-
-export async function createWeeklyGoal(params: {
-  user_id: string;
-  project_id: string;
-  week_start: string;
-}) {
-  const { data, error } = await supabase
-    .from("weekly_goals")
-    .insert({
-      user_id: params.user_id,
-      project_id: params.project_id,
-      week_start: params.week_start,
-      title: "New goal",
-    })
-    .select("*")
-    .single();
-  if (error) throw error;
-  return data as WeeklyGoal;
-}
-
-export async function updateWeeklyGoal(id: string, patch: GoalUpdate) {
-  const { data, error } = await supabase
-    .from("weekly_goals")
-    .update({
-      ...patch,
-      updated_at: new Date().toISOString(),
-      completed_at: patch.is_completed ? new Date().toISOString() : null,
-    })
-    .eq("id", id)
-    .select("*")
-    .single();
-  if (error) throw error;
-  return data as WeeklyGoal;
-}
-
-export async function fetchWeeklyGoalsByWeek({ weekStart }: Props) {
-  const { data, error } = await supabase
-    .from("weekly_goals")
-    .select("id,project_id,title,is_completed")
-    .eq("week_start", weekStart)
-    .order("created_at");
-  if (error) throw error;
-  return (data ?? []) as WeeklyGoal[];
-}
-
 type LogRow = { duration: number | null };
 
-export async function fetchWeeklyTotalMinutes({
-  weekStart,
-  nextWeekStart,
-}: Props) {
+export async function createWeeklyReview(userId: string, weekStart: string) {
+  const { data, error } = await supabase
+    .from("weekly_reviews")
+    .insert({
+      user_id: userId,
+      week_start: weekStart,
+      weekly_minutes: 1680,
+    })
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
+export async function fetchWeeklyTotalTime({ weekStart }: Props) {
+  const { data, error } = await supabase
+    .from("weekly_reviews")
+    .select("weekly_minutes")
+    .gte("week_start", weekStart)
+    .single();
+
+  if (error) throw error;
+  if (!data) return 0;
+  return data.weekly_minutes;
+}
+
+export async function fetchWeeklyUsedTime({ weekStart, nextWeekStart }: Props) {
   const { data, error } = await supabase
     .from("task_logs")
     .select("duration")

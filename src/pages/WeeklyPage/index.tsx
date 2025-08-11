@@ -8,8 +8,8 @@ import {
   nextWeekStart,
   prevWeekStart,
 } from "@/lib/utils";
-import { useWeeklyCompletion } from "@/hooks/weekly/useWeeklyCompletion";
 import { useWeeklyStatDurations } from "@/hooks/weekly/useWeeklyStatDurations";
+import { useWeeklyBehaviorCompletion } from "@/hooks/weekly/useWeeklyBehaviorCompletion";
 
 import WeeklySummary from "./WeeklySummary";
 
@@ -17,7 +17,7 @@ export default function WeeklyPage() {
   const { weekStart } = useParams<{ weekStart: string }>();
   const { monday, sunday, year, weekNumber } = getWeekRange(weekStart);
 
-  const { data: completion } = useWeeklyCompletion(monday);
+  const { data: completion } = useWeeklyBehaviorCompletion(monday, sunday);
   const { data: statDurations } = useWeeklyStatDurations(monday);
 
   return (

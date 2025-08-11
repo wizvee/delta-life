@@ -8,6 +8,7 @@ export type Task = {
   status: "next" | "done" | "cancelled" | "someday" | "waiting";
   due_date?: string;
   due_time?: string;
+  end_date?: string;
   duration: number;
 };
 
@@ -101,4 +102,21 @@ export async function getCurrentTask(userId: string): Promise<TaskLog | null> {
     start_time: data.start_time,
     end_time: data.end_time ?? undefined,
   };
+}
+
+export async function getTasksInRange(
+  start: string,
+  end: string,
+): Promise<Task[]> {
+  const { data, error } = await supabase
+    .from("tasks")
+    .select("*")
+    .or(
+      // (due in week) OR (end in week)
+      `and(due_date.gte.${start},due_date.lt.${end}),` +
+        `and(end_date.gte.${start},end_date.lt.${end})`,
+    );
+
+  if (error) throw error;
+  return data;
 }

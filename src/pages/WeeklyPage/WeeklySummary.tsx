@@ -28,18 +28,20 @@ export default function WeeklySummary({ completion }: Props) {
             progressClass={getPercentColor(completion.rate)}
           />
           <div className="grid grid-cols-2 gap-1 text-sm">
-            <div>전체 목표:</div>
-            <div className="font-semibold">{completion.total}</div>
-            <div>달성 목표:</div>
-            <div className="font-semibold">{completion.completed}</div>
-            <div>남은 목표:</div>
-            <div className="font-semibold">
+            <div>전체 행동:</div>
+            <div className="font-mono font-semibold">{completion.total}</div>
+            <div>완료 행동:</div>
+            <div className="font-mono font-semibold">
+              {completion.completed}
+            </div>
+            <div>남은 행동:</div>
+            <div className="font-mono font-semibold">
               {completion.total - completion.completed}
             </div>
           </div>
         </div>
       </Card>
-      <Card title="시간 달성률">
+      {/* <Card title="시간 달성률">
         <div className="mt-4 flex items-center justify-center gap-6">
           <DonutProgress
             value={0.6}
@@ -54,7 +56,7 @@ export default function WeeklySummary({ completion }: Props) {
             <div className="font-semibold">6</div>
           </div>
         </div>
-      </Card>
+      </Card> */}
     </div>
   );
 }

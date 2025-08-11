@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+import { toast } from "sonner";
 import { Circle, CircleCheck } from "lucide-react";
 
 import { formatDuration } from "@/lib/utils";
@@ -9,7 +11,6 @@ import { useTask } from "@/hooks/useTask";
 
 import { Button } from "@/components/ui/button";
 import { TabsContent } from "@/components/ui/tabs";
-import { toast } from "sonner";
 
 // import ProjectTaskMenu from "./ProjectTaskMenu";
 
@@ -56,7 +57,12 @@ export default function ProjectTasks({ project }: Props) {
               className="flex items-center gap-2 p-1 text-sm hover:bg-neutral-50"
             >
               <div
-                onClick={() => handleUpdateTask(task.id, { status: "done" })}
+                onClick={() =>
+                  handleUpdateTask(task.id, {
+                    status: "done",
+                    end_date: dayjs().format("YYYY-MM-DD"),
+                  })
+                }
               >
                 {task.status === "done" ? (
                   <CircleCheck

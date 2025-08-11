@@ -1,7 +1,6 @@
 import { supabase } from "../supabase";
 import type { Stat } from "./stats";
 import type { Task } from "./tasks";
-import type { WeeklyGoal } from "./weekly";
 
 export type Project = {
   id: string;
@@ -13,7 +12,6 @@ export type Project = {
   due_date?: string;
   tasks: Task[];
   // options
-  goals?: WeeklyGoal[];
   total_minutes?: number;
   drive_folder_id?: string;
 };
