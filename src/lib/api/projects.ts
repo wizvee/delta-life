@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { supabase } from "../supabase";
 import type { Stat } from "./stats";
 import type { Task } from "./tasks";
@@ -21,16 +22,15 @@ export type ProjectUpdate = Partial<
 >;
 
 export async function createProject(userId: string, statId: string) {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
+  const today = dayjs();
   const { data, error } = await supabase
     .from("projects")
     .insert({
       user_id: userId,
       stat_id: statId,
       title: "New Project",
-      start_date: today.toISOString(),
+      start_date: today,
+      due_date: today.endOf("isoWeek"),
     })
     .select()
     .single();
