@@ -3,7 +3,7 @@ import { useCallback, useMemo } from "react";
 import isBetween from "dayjs/plugin/isBetween";
 
 import { useTask } from "@/hooks/useTask";
-import type { Task } from "@/lib/api/tasks";
+import type { Task, TaskUpdate } from "@/lib/api/tasks";
 import { splitIntoIsoWeeks } from "@/lib/utils";
 import type { Project } from "@/lib/api/projects";
 
@@ -18,7 +18,7 @@ interface Props {
 
 export default function ProjectTasks({ project }: Props) {
   const { start_date: startDate, due_date: dueDate, tasks } = project;
-  const { create } = useTask();
+  const { create, update } = useTask();
 
   const sections = useMemo(
     () => splitIntoIsoWeeks(startDate, dueDate),
@@ -50,6 +50,16 @@ export default function ProjectTasks({ project }: Props) {
     [create, project.id, project.user_id],
   );
 
+  const handleUpdateTask = useCallback(
+    (taskId: string, updates: TaskUpdate) => {
+      update.mutate({
+        taskId,
+        updates,
+      });
+    },
+    [update],
+  );
+
   if (!sections.length) {
     return (
       <TabsContent value="tasks" className="my-2">
@@ -68,6 +78,7 @@ export default function ProjectTasks({ project }: Props) {
           section={s}
           tasks={tasksBySection.get(s.weekNumber) ?? []}
           onCreateTask={handleCreateTask}
+          onUpdateTask={handleUpdateTask}
         />
       ))}
     </TabsContent>

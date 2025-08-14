@@ -26,11 +26,9 @@ export function useTask() {
     }) => createTask(userId, projectId, dueDate),
     onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({
-        queryKey: ["tasks"],
-      });
-      queryClient.invalidateQueries({
         queryKey: ["project", variables.projectId],
       });
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
     },
   });
 
@@ -43,6 +41,7 @@ export function useTask() {
       updates: TaskUpdate;
     }) => updateTask(taskId, updates),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["project"] });
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
     },
   });
@@ -59,7 +58,6 @@ export function useTask() {
     mutationFn: ({ logId }: { logId: string }) => endTask(logId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["current-task"] });
-      queryClient.invalidateQueries({ queryKey: ["projects"] });
       queryClient.invalidateQueries({ queryKey: ["project"] });
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
     },

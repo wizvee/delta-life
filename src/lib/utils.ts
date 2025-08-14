@@ -11,9 +11,12 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatDate(date: string | undefined): string {
-  if (!date) return "";
-  return dayjs(date).format("MMM DD, YYYY");
+export function formatDate(dateStr: string | undefined): string {
+  if (!dateStr) return "";
+
+  const date = dayjs(dateStr);
+  if (dayjs().isSame(date, "year")) return date.format("MMM DD");
+  return date.format("MMM DD, YYYY");
 }
 
 export function formatDuration(m: number) {

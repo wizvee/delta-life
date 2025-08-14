@@ -1,3 +1,4 @@
+import type { Matcher } from "react-day-picker";
 import { useState, type ReactNode } from "react";
 
 import { Calendar } from "./ui/calendar";
@@ -6,10 +7,16 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 interface DatePickerProps {
   children: ReactNode;
   value?: Date;
+  disabled?: Matcher;
   onChange?: (date: string | undefined) => void;
 }
 
-export function DatePicker({ children, value, onChange }: DatePickerProps) {
+export function DatePicker({
+  children,
+  value,
+  disabled,
+  onChange,
+}: DatePickerProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -19,6 +26,7 @@ export function DatePicker({ children, value, onChange }: DatePickerProps) {
         <Calendar
           mode="single"
           selected={value}
+          disabled={disabled}
           captionLayout="dropdown"
           onSelect={(date) => {
             if (date) {

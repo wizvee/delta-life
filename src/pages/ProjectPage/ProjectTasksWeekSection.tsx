@@ -1,28 +1,24 @@
-import {
-  ArrowRight,
-  ArrowRightToLine,
-  Calendar,
-  Circle,
-  CircleArrowRight,
-  CircleCheck,
-  CircleX,
-  Plus,
-} from "lucide-react";
 import dayjs from "dayjs";
 import { memo, useMemo } from "react";
-import type { Task } from "@/lib/api/tasks";
+import { ArrowRight, ArrowRightToLine, Plus } from "lucide-react";
+
+import type { Task, TaskUpdate } from "@/lib/api/tasks";
 import { formatDate, type WeekSpan } from "@/lib/utils";
+
+import { TaskItem } from "@/components/TaskItem";
 
 interface Props {
   section: WeekSpan;
   tasks: Task[];
   onCreateTask: (dueDate: string) => void;
+  onUpdateTask: (taskId: string, updates: TaskUpdate) => void;
 }
 
 export const WeekSection = memo(function WeekSection({
   section,
   tasks,
   onCreateTask,
+  onUpdateTask,
 }: Props) {
   const { weekNumber, startDate, endDate } = section;
 
@@ -60,31 +56,9 @@ export const WeekSection = memo(function WeekSection({
             dayjs(t.due_date).isBetween(startDate, endDate, "day", "[]"),
           )
           .map((t) => (
-            <li key={t.id} className="flex items-center gap-2.5">
-              <StatusIcon status={t.status} />
-              <div className="flex flex-col gap-0.5">
-                <span>{t.title}</span>
-                <span className="flex items-center gap-1 text-xs text-neutral-400">
-                  <Calendar className="h-3 w-3" />
-                  {formatDate(t.due_date)}
-                </span>
-              </div>
-            </li>
+            <TaskItem key={t.id} task={t} onUpdate={onUpdateTask} />
           ))}
       </ul>
     </section>
   );
 });
-
-function StatusIcon({ status }: { status: string }) {
-  if (status === "done") {
-    return <CircleCheck fill="#87dc8a" className="h-4.5 w-4.5" />;
-  }
-  if (status === "deferred") {
-    return <CircleArrowRight fill="#f7dd7d" className="h-4.5 w-4.5" />;
-  }
-  if (status === "cancelled") {
-    return <CircleX fill="#ff8e7d" className="h-4.5 w-4.5" />;
-  }
-  return <Circle className="h-4.5 w-4.5" />;
-}
